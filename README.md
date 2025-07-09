@@ -19,6 +19,7 @@ pixi workspace environment add development --feature development --feature test
 pixi add --feature test tox pytest pytest-cov pytest-qt napari
 pixi add --feature test --pypi pyqt5
 pixi add --feature development copier jinja2-time npe2 pre-commit
+
 git add .
 git commit -m "Initial commit"
 git branch -M main
@@ -37,13 +38,13 @@ Then, set anapari-plugin-template options as follows:
 
 ```console
 🎤 The name of your plugin, used to name the package and repository
-   napari-segmarg
+   napari-flicker
 🎤 Display name for your plugin in the napari GUI
-   Segmarg
+   Flicker
 🎤 Plugin module name, usually the same as the name of the plugin package, but lower
-   napari_segmarg
+   napari_flicker
 🎤 Short description of what your plugin does
-   A Segmentation plugin for Micro Autoradiography images.
+   Blinking layers in napari
 🎤 Email address
    amano.takahisa@gmail.com
 🎤 Developer name
@@ -51,7 +52,7 @@ Then, set anapari-plugin-template options as follows:
 🎤 Github user or organisation name
    amano-takahisa
 🎤 Github repository URL
-   https://github.com/amano-takahisa/napari-segmarg
+   https://github.com/amano-takahisa/napari-flicker
 🎤 Include reader plugin?
    Yes
 🎤 Include writer plugin?
