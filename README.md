@@ -17,7 +17,7 @@ echo '\n[tool.pixi.feature.test.dependencies]' >> pyproject.toml
 pixi workspace environment add test --feature test
 pixi workspace environment add development --feature development --feature test
 pixi add --feature test tox pytest pytest-cov pytest-qt napari
-pixi add --feature test --pypi pyqt5
+pixi add --feature test --pypi pyqt5 napari
 pixi add --feature development copier jinja2-time npe2 pre-commit
 
 git add .
@@ -69,4 +69,51 @@ Then, set anapari-plugin-template options as follows:
    Yes
 🎤 Which licence do you want your plugin code to have?
    Apache Software License 2.0
+```
+
+Move necessary files in tmp to the root directory.
+
+```bash
+rm -rf src
+mv tmp/.github .
+mv tmp/.napari-hub .
+mv tmp/src .
+cat tmp/.gitignore >> .gitignore
+mv tmp/.pre-commit-config.yaml .pre-commit-config.yaml
+mv tmp/LICENSE LICENSE
+mv tmp/MANIFEST.in MANIFEST.in
+mv tmp/tox.ini tox.ini
+```
+
+And manually merge following files:
+
+```bash
+pyproject.toml
+README.md
+```
+
+remove the tmp directory:
+
+```bash
+rm -rf tmp
+```
+
+drop black from pre-commit configuration.
+
+
+format the code:
+
+```bash
+git add .
+pixi shell --environment development
+pre-commit run --all-files
+pre-commit run --all-files
+```
+
+Finally, commit the changes:
+
+```bash
+git add -u
+git commit -m "Initialize the napari-flicker plugin"
+git push
 ```

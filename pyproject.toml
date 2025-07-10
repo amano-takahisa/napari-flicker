@@ -1,13 +1,56 @@
 [project]
 authors = [{name = "Taka", email = "amano.takahisa@gmail.com"}]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Framework :: napari",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
 dependencies = []
+description = "Blinking layers in napari"
+dynamic = ["version"]
+license = {file = "LICENSE"}
 name = "napari-flicker"
-requires-python = ">= 3.11"
-version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.entry-points."napari.manifest"]
+napari-flicker = "napari_flicker:napari.yaml"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/amano-takahisa/napari-flicker/issues"
+"Documentation" = "https://github.com/amano-takahisa/napari-flicker#README.md"
+"Source Code" = "https://github.com/amano-takahisa/napari-flicker"
+"User Support" = "https://github.com/amano-takahisa/napari-flicker/issues"
 
 [build-system]
-build-backend = "hatchling.build"
-requires = ["hatchling"]
+requires = ["setuptools>=42.0.0", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+test = [ "pyqt5>=5.15.11,<6", "napari>=0.6.2,<0.7"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml"]
+
+[tool.setuptools_scm]
+write_to = "src/napari_flicker/_version.py"
+fallback_version = "0.0.1+nogit"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -29,11 +72,66 @@ tox = ">=4.27.0,<5"
 pytest = ">=8.4.1,<9"
 pytest-cov = ">=6.2.1,<7"
 pytest-qt = ">=4.5.0,<5"
-napari = ">=0.6.2,<0.7"
 
 [tool.pixi.environments]
 test = ["test"]
 development = ["development", "test"]
 
-[dependency-groups]
-test = ["pyqt5>=5.15.11,<6"]
+[tool.ruff]
+line-length = 79
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".mypy_cache",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "*vendored*",
+    "*_vendor*",
+]
+[tool.ruff.lint]
+flake8-quotes.inline-quotes = "single"
+
+[tool.ruff.lint.per-file-ignores]
+"test_*.py" = [
+    "S101",  # Use of assert detected
+    "SLF001",  # Private member accessed: {access}
+]
+
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
+
+[tool.isort]
+line_length = 79
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__"]
+reportMissingImports = true
+reportMissingTypeStubs = false
+# Reduce napari-related warnings for external library compatibility
+reportAttributeAccessIssue = "information"
+reportOptionalMemberAccess = "warning"
+reportReturnType = "warning"
+reportGeneralTypeIssues = "warning"
+reportArgumentType = "warning"
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
+ignore = [
+    "src/napari_segmarg/statistics.py"
+]
+executionEnvironments = [{root = "src"}]
+venvPath = ".pixi/envs/"
+venv = "development"
