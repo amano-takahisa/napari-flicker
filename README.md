@@ -1,5 +1,32 @@
 # napari-flicker
 
+## Usage
+
+Start napari with the plugin:
+
+```bash
+napari --with napari-flicker 'Flicker Widget'
+```
+
+## Development
+
+Start development environment with the following command:
+
+```bash
+pixi shell --environment development
+```
+
+After updating code in the environment, you can run the tests with:
+
+```bash
+pixi run --environment test tox
+```
+
+Formatter and linter can be run with:
+
+```bash
+pixi run --environment development pre-commit run --all-files
+```
 
 ## Record of steps taken in initializing the repository
 
