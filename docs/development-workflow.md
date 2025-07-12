@@ -94,8 +94,6 @@ We use conventional commits for clear commit history:
 <type>(<scope>): <description>
 
 <body>
-
-<footer>
 ```
 
 #### Types
@@ -178,15 +176,14 @@ Closes #123
 ### 4. Merging Strategy
 
 #### Feature to Main
-- **Method**: Squash and merge (recommended) or merge commit
-- **Reason**: Clean commit history on main
+- **Method**: Merge commit (preserve commit history)
+- **Reason**: Maintain full development history and individual commits
 - **Process**: 
   1. Create PR from feature branch to main
   2. Code review and approval required
   3. All status checks must pass
-  4. Squash commits into single logical commit
-  5. Use descriptive commit message
-  6. Delete feature branch after merge
+  4. Merge with merge commit (no squashing)
+  5. Delete feature branch after merge
 
 ## Release Process
 
