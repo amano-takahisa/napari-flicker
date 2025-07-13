@@ -1,16 +1,16 @@
 import numpy as np
 
-from napari_flicker._widget import ExampleQWidget
+from napari_flicker._widget import FlickerWidget
 
 
 # capsys is a pytest fixture that captures stdout and stderr output streams
-def test_example_q_widget(make_napari_viewer, capsys):
+def test_flicker_widget(make_napari_viewer, capsys):
     # make viewer and add an image layer using our fixture
     viewer = make_napari_viewer()
     viewer.add_image(np.random.random((100, 100)))
 
     # create our widget, passing in the viewer
-    my_widget = ExampleQWidget(viewer)
+    my_widget = FlickerWidget(viewer)
 
     # call our widget method
     my_widget._on_click()

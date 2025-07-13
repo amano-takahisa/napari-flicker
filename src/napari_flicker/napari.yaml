@@ -19,8 +19,8 @@ contributions:
       python_name: napari_flicker._sample_data:make_sample_data
       title: Load sample data from Flicker
     - id: napari-flicker.make_qwidget
-      python_name: napari_flicker:ExampleQWidget
-      title: Make example QWidget
+      python_name: napari_flicker:FlickerWidget
+      title: Make Flicker Widget
   readers:
     - command: napari-flicker.get_reader
       accepts_directories: false
@@ -38,4 +38,4 @@ contributions:
       key: unique_id.1
   widgets:
     - command: napari-flicker.make_qwidget
-      display_name: Example QWidget
+      display_name: Flicker Widget

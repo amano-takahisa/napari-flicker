@@ -1,5 +1,5 @@
 """
-This module contains the Example QWidget.
+This module contains the Flicker Widget.
 
 References:
 - Widget specification: https://napari.org/stable/plugins/building_a_plugin/guides.html#widgets
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     import napari
 
 
-class ExampleQWidget(QWidget):
+class FlickerWidget(QWidget):
     # your QWidget.__init__ can optionally request the napari viewer instance
     # use a type annotation of 'napari.viewer.Viewer' for any parameter
     def __init__(self, viewer: 'napari.viewer.Viewer'):
