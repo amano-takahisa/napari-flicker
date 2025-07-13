@@ -18,8 +18,8 @@
             pixi
           ];
 
+          # export SHELL=${lib.getExe pkgs.bash}
           shellHook = ''
-            export SHELL=${lib.getExe pkgs.bash}
             export PS1="(nix-dev) \u@\h:\w\$ "
             echo "Development environment with pixi is ready!"
             echo "Run 'pixi shell --environment development' to start the pixi shell for development."

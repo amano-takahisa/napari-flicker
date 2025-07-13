@@ -21,7 +21,14 @@ pixi shell --environment development
 After updating code in the environment, you can run the tests with:
 
 ```bash
-pixi run --environment test tox
+# Run tests in the default test environment
+pixi run test
+
+# Run tests in a specific Python version environment
+pixi run --environment test-py311 test
+
+# Run tests across all Python versions
+pixi run test-all
 ```
 
 Formatter and linter can be run with:
@@ -45,7 +52,7 @@ echo '\n[tool.pixi.feature.development.dependencies]' >> pyproject.toml
 echo '\n[tool.pixi.feature.test.dependencies]' >> pyproject.toml
 pixi workspace environment add test --feature test
 pixi workspace environment add development --feature development --feature test
-pixi add --feature test tox pytest pytest-cov pytest-qt napari
+pixi add --feature test pytest pytest-cov pytest-qt napari
 pixi add --feature test --pypi pyqt5 napari
 pixi add --feature development copier jinja2-time npe2 pre-commit
 
@@ -111,7 +118,7 @@ cat tmp/.gitignore >> .gitignore
 mv tmp/.pre-commit-config.yaml .pre-commit-config.yaml
 mv tmp/LICENSE LICENSE
 mv tmp/MANIFEST.in MANIFEST.in
-mv tmp/tox.ini tox.ini
+# tox.ini is no longer needed as we use pixi for testing
 ```
 
 And manually merge following files:
