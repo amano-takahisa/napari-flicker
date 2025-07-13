@@ -18,18 +18,9 @@ contributions:
     - id: napari-flicker.make_sample_data
       python_name: napari_flicker._sample_data:make_sample_data
       title: Load sample data from Flicker
-    - id: napari-flicker.make_container_widget
-      python_name: napari_flicker:ImageThreshold
-      title: Make threshold Container widget
-    - id: napari-flicker.make_magic_widget
-      python_name: napari_flicker:threshold_magic_widget
-      title: Make threshold magic widget
-    - id: napari-flicker.make_function_widget
-      python_name: napari_flicker:threshold_autogenerate_widget
-      title: Make threshold function widget
     - id: napari-flicker.make_qwidget
-      python_name: napari_flicker:ExampleQWidget
-      title: Make example QWidget
+      python_name: napari_flicker:FlickerWidget
+      title: Make Flicker Widget
   readers:
     - command: napari-flicker.get_reader
       accepts_directories: false
@@ -46,12 +37,5 @@ contributions:
       display_name: Flicker
       key: unique_id.1
   widgets:
-    - command: napari-flicker.make_container_widget
-      display_name: Container Threshold
-    - command: napari-flicker.make_magic_widget
-      display_name: Magic Threshold
-    - command: napari-flicker.make_function_widget
-      autogenerate: true
-      display_name: Autogenerate Threshold
     - command: napari-flicker.make_qwidget
-      display_name: Example QWidget
+      display_name: Flicker Widget
