@@ -13,6 +13,8 @@ napari --with napari-flicker 'Flicker Widget'
 Start development environment with the following command:
 
 ```bash
+# pixi can be installed with nix if you don't have it yet
+# $ nix develop
 pixi shell --environment development
 ```
 
