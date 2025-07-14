@@ -1,0 +1,7 @@
+{
+  "hooks": {
+    "PostToolUse": {
+      "Write|Edit|MultiEdit": "jq -r '.tool_input.file_path | select(endswith(\".py\"))' | xargs -r sh -c 'ruff check --fix --unsafe-fixes \"$0\" && ruff format \"$0\"'"
+    }
+  }
+}
