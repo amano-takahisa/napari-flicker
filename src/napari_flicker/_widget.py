@@ -3,30 +3,130 @@ This module contains the Flicker Widget.
 
 References:
 - Widget specification: https://napari.org/stable/plugins/building_a_plugin/guides.html#widgets
-
-Replace code below according to your needs.
 """
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
-from qtpy.QtWidgets import QHBoxLayout, QPushButton, QWidget
+from qtpy.QtWidgets import (
+    QVBoxLayout,
+    QPushButton,
+    QWidget,
+    QCheckBox,
+    QScrollArea,
+    QLabel,
+)
+from qtpy.QtCore import QTimer
 
 if TYPE_CHECKING:
     import napari
 
 
 class FlickerWidget(QWidget):
-    # your QWidget.__init__ can optionally request the napari viewer instance
-    # use a type annotation of 'napari.viewer.Viewer' for any parameter
+    """Main widget for napari-flicker plugin."""
+
     def __init__(self, viewer: 'napari.viewer.Viewer'):
         super().__init__()
         self.viewer = viewer
+        self.layer_checkboxes: List[QCheckBox] = []
 
-        btn = QPushButton('Click me!')
-        btn.clicked.connect(self._on_click)
+        # Setup timer for flicker functionality
+        self.flicker_timer = QTimer()
+        self.flicker_timer.setInterval(500)  # 500ms interval
+        self.flicker_timer.timeout.connect(self._flicker_tick)
 
-        self.setLayout(QHBoxLayout())
-        self.layout().addWidget(btn)
+        # Setup UI components
+        self._setup_ui()
 
-    def _on_click(self):
-        print('napari has', len(self.viewer.layers), 'layers')
+        # Connect to layer events for automatic updates
+        self.viewer.layers.events.inserted.connect(self._on_layers_changed)
+        self.viewer.layers.events.removed.connect(self._on_layers_changed)
+
+        # Initial layer list update
+        self._update_layer_list()
+
+    def _setup_ui(self):
+        """Initialize the user interface components."""
+        layout = QVBoxLayout()
+
+        # Title
+        title_label = QLabel('napari-flicker')
+        layout.addWidget(title_label)
+
+        # Layer selection area
+        layers_label = QLabel('Available Layers:')
+        layout.addWidget(layers_label)
+
+        # Scrollable area for layer checkboxes
+        self.scroll_area = QScrollArea()
+        self.scroll_widget = QWidget()
+        self.scroll_layout = QVBoxLayout(self.scroll_widget)
+        self.scroll_area.setWidget(self.scroll_widget)
+        self.scroll_area.setWidgetResizable(True)
+        layout.addWidget(self.scroll_area)
+
+        # Toggle button
+        self.toggle_button = QPushButton('Start Flicker')
+        self.toggle_button.clicked.connect(self._toggle_flicker)
+        layout.addWidget(self.toggle_button)
+
+        self.setLayout(layout)
+
+    def _get_supported_layers(self):
+        """Get Image and Labels layers from viewer."""
+        import napari
+
+        supported_types = (napari.layers.Image, napari.layers.Labels)
+        return [
+            layer
+            for layer in self.viewer.layers
+            if isinstance(layer, supported_types)
+        ]
+
+    def _update_layer_list(self):
+        """Update the layer checkbox list."""
+        # Clear existing checkboxes
+        for checkbox in self.layer_checkboxes:
+            checkbox.setParent(None)
+        self.layer_checkboxes.clear()
+
+        # Add checkboxes for supported layers
+        supported_layers = self._get_supported_layers()
+        for layer in supported_layers:
+            checkbox = QCheckBox(layer.name)
+            self.layer_checkboxes.append(checkbox)
+            self.scroll_layout.addWidget(checkbox)
+
+    def _on_layers_changed(self, event):
+        """Handle layer list changes."""
+        self._update_layer_list()
+
+    def _get_selected_layers(self):
+        """Get layers that are currently selected via checkboxes."""
+        selected_layers = []
+        supported_layers = self._get_supported_layers()
+
+        for i, checkbox in enumerate(self.layer_checkboxes):
+            if checkbox.isChecked() and i < len(supported_layers):
+                selected_layers.append(supported_layers[i])
+
+        return selected_layers
+
+    def _toggle_flicker(self):
+        """Toggle the flicker functionality on/off."""
+        if self.flicker_timer.isActive():
+            # Stop flicker
+            self.flicker_timer.stop()
+            self.toggle_button.setText('Start Flicker')
+        else:
+            # Start flicker only if layers are selected
+            selected_layers = self._get_selected_layers()
+            if selected_layers:
+                self.flicker_timer.start()
+                self.toggle_button.setText('Stop Flicker')
+            # If no layers selected, do nothing (button stays "Start Flicker")
+
+    def _flicker_tick(self):
+        """Toggle visibility of selected layers."""
+        selected_layers = self._get_selected_layers()
+        for layer in selected_layers:
+            layer.visible = not layer.visible
