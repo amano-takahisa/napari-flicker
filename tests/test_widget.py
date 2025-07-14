@@ -43,8 +43,8 @@ def test_flicker_widget_layer_detection(make_napari_viewer):
     # Test _get_supported_layers method
     supported_layers = widget._get_supported_layers()
     assert len(supported_layers) == 2
-    assert supported_layers[0].name == 'Image 1'
-    assert supported_layers[1].name == 'Labels 1'
+    assert supported_layers[0].name == 'Labels 1'
+    assert supported_layers[1].name == 'Image 1'
 
 
 def test_flicker_widget_ui_update(make_napari_viewer):
@@ -65,8 +65,8 @@ def test_flicker_widget_ui_update(make_napari_viewer):
     # Check checkboxes created
     assert len(widget.layer_checkboxes) == 2
     assert all(isinstance(cb, QCheckBox) for cb in widget.layer_checkboxes)
-    assert widget.layer_checkboxes[0].text() == 'Image 1'
-    assert widget.layer_checkboxes[1].text() == 'Labels 1'
+    assert widget.layer_checkboxes[0].text() == 'Labels 1'
+    assert widget.layer_checkboxes[1].text() == 'Image 1'
 
 
 def test_flicker_widget_toggle_button(make_napari_viewer):
