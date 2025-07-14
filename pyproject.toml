@@ -61,7 +61,7 @@ platforms = ["linux-64", "win-64"]
 napari_flicker = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-test-all = "pixi run -e test-py310 test && pixi run -e test-py311 test && pixi run -e test-py312 test && pixi run -e test-py313 test"
+test-all = "pixi run -e py310 test && pixi run -e py311 test && pixi run -e py312 test && pixi run -e py313 test"
 test = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml"
 
 [tool.pixi.feature.development.dependencies]
@@ -89,10 +89,10 @@ python = "3.13.*"
 
 [tool.pixi.environments]
 test = ["test"]
-test-py310 = ["test", "py310"]
-test-py311 = ["test", "py311"]
-test-py312 = ["test", "py312"]
-test-py313 = ["test", "py313"]
+py310 = ["test", "py310"]
+py311 = ["test", "py311"]
+py312 = ["test", "py312"]
+py313 = ["test", "py313"]
 development = ["development", "test"]
 
 [tool.ruff]
