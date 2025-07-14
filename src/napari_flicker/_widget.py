@@ -60,6 +60,8 @@ class FlickerWidget(QWidget):
         self.scroll_area = QScrollArea()
         self.scroll_widget = QWidget()
         self.scroll_layout = QVBoxLayout(self.scroll_widget)
+        self.scroll_layout.setSpacing(2)  # Reduce spacing between items
+        self.scroll_layout.setContentsMargins(5, 5, 5, 5)  # Reduce margins
         self.scroll_area.setWidget(self.scroll_widget)
         self.scroll_area.setWidgetResizable(True)
         layout.addWidget(self.scroll_area)
@@ -72,13 +74,13 @@ class FlickerWidget(QWidget):
         self.setLayout(layout)
 
     def _get_supported_layers(self):
-        """Get Image and Labels layers from viewer."""
+        """Get Image and Labels layers from viewer in reverse order."""
         import napari
 
         supported_types = (napari.layers.Image, napari.layers.Labels)
         return [
             layer
-            for layer in self.viewer.layers
+            for layer in reversed(self.viewer.layers)
             if isinstance(layer, supported_types)
         ]
 
