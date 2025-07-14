@@ -76,7 +76,7 @@ GREEN: Implement minimal layer filtering for Image/Labels
 REFACTOR: Improve code organization and performance
 
 - Add failing test for layer selection behavior
-- Implement QCheckBox list for layer selection  
+- Implement QCheckBox list for layer selection
 - Add layer filtering for Image/Labels
 - Refactor UI component organization
 - Add automatic layer list updates
@@ -178,7 +178,7 @@ Closes #123
 #### Feature to Main
 - **Method**: Merge commit (preserve commit history)
 - **Reason**: Maintain full development history and individual commits
-- **Process**: 
+- **Process**:
   1. Create PR from feature branch to main
   2. Code review and approval required
   3. All status checks must pass
@@ -233,22 +233,22 @@ jobs:
     strategy:
       matrix:
         python-version: [3.10, 3.11, 3.12]
-    
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -e .[test]
-    
+
     - name: Run tests
       run: pytest --cov=napari_flicker --cov-report=xml
-    
+
     - name: Upload coverage
       uses: codecov/codecov-action@v3
 ```

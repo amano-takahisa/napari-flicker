@@ -112,7 +112,7 @@ src/napari_flicker/
 ```python
 class FlickerWidget(QWidget):
     """Main widget for napari-flicker plugin."""
-    
+
     def __init__(self, viewer: napari.viewer.Viewer)
     def _setup_ui(self)                    # UI initialization
     def _update_layer_list(self)           # Layer list management
@@ -151,7 +151,7 @@ class FlickerWidget(QWidget):
 def _get_supported_layers(self):
     """Get Image and Labels layers from viewer."""
     supported_types = (napari.layers.Image, napari.layers.Labels)
-    return [layer for layer in self.viewer.layers 
+    return [layer for layer in self.viewer.layers
             if isinstance(layer, supported_types)]
 ```
 
@@ -203,7 +203,7 @@ Following TDD principles, all code is developed using the Red-Green-Refactor cyc
 
 #### Unit Tests (Written First)
 - **Layer Detection**: Test filtering of supported layer types
-- **UI Components**: Test checkbox and button functionality  
+- **UI Components**: Test checkbox and button functionality
 - **Timer Logic**: Test flicker timing and state management
 - **Error Handling**: Test edge cases and error conditions
 - **State Management**: Test internal state transitions
