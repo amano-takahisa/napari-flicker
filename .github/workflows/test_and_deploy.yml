@@ -17,21 +17,38 @@ on:
 
 jobs:
   test:
-    name: ${{ matrix.platform }} py${{ matrix.python-version }}
+    name: ${{ matrix.environment }}
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 30
     strategy:
       matrix:
-        platform: [ubuntu-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - platform: ubuntu-latest
+            environment: py310
+          - platform: ubuntu-latest
+            environment: py311
+          - platform: ubuntu-latest
+            environment: py312
+          - platform: ubuntu-latest
+            environment: py313
+          - platform: windows-latest
+            environment: py310
+          - platform: windows-latest
+            environment: py311
+          - platform: windows-latest
+            environment: py312
+          - platform: windows-latest
+            environment: py313
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@v0.8.3
         with:
-          python-version: ${{ matrix.python-version }}
+          pixi-version: v0.49.0
+          cache: true
+          environments: ${{ matrix.environment }}
 
       # these libraries enable testing on Qt on linux
       - uses: tlambert03/setup-qt-libs@v1
@@ -43,22 +60,11 @@ jobs:
           git clone --depth 1 https://github.com/pyvista/gl-ci-helpers.git
           powershell gl-ci-helpers/appveyor/install_opengl.ps1
 
-      # note: if you need dependencies from conda, considering using
-      # setup-miniconda: https://github.com/conda-incubator/setup-miniconda
-      # and
-      # tox-conda: https://github.com/tox-dev/tox-conda
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install setuptools tox tox-gh-actions
-
-      # this runs the platform-specific tests declared in tox.ini
-      - name: Test with tox
+      # run tests with pixi for each Python version
+      - name: Test with pixi
         uses: aganders3/headless-gui@v2
         with:
-          run: python -m tox
-        env:
-          PLATFORM: ${{ matrix.platform }}
+          run: pixi run --environment ${{ matrix.environment }} test
 
       - name: Coverage
         uses: codecov/codecov-action@v3

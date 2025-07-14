@@ -23,6 +23,9 @@ name = "napari-flicker"
 readme = "README.md"
 requires-python = ">=3.10"
 
+[project.optional-dependencies]
+test = ["pyqt5>=5.15.11,<6", "napari>=0.6.2,<0.7"]
+
 [project.entry-points."napari.manifest"]
 napari-flicker = "napari_flicker:napari.yaml"
 
@@ -36,8 +39,6 @@ napari-flicker = "napari_flicker:napari.yaml"
 requires = ["setuptools>=42.0.0", "wheel", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
-[dependency-groups]
-test = [ "pyqt5>=5.15.11,<6", "napari>=0.6.2,<0.7"]
 
 [tool.setuptools]
 include-package-data = true
@@ -54,12 +55,14 @@ fallback_version = "0.0.1+nogit"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
-platforms = ["linux-64"]
+platforms = ["linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
 napari_flicker = { path = ".", editable = true }
 
 [tool.pixi.tasks]
+test-all = "pixi run -e py310 test && pixi run -e py311 test && pixi run -e py312 test && pixi run -e py313 test"
+test = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml"
 
 [tool.pixi.feature.development.dependencies]
 copier = ">=9.8.0,<10"
@@ -68,13 +71,28 @@ npe2 = ">=0.7.8,<0.8"
 pre-commit = ">=4.2.0,<5"
 
 [tool.pixi.feature.test.dependencies]
-tox = ">=4.27.0,<5"
 pytest = ">=8.4.1,<9"
 pytest-cov = ">=6.2.1,<7"
 pytest-qt = ">=4.5.0,<5"
 
+[tool.pixi.feature.py310.dependencies]
+python = "3.10.*"
+
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+
 [tool.pixi.environments]
 test = ["test"]
+py310 = ["test", "py310"]
+py311 = ["test", "py311"]
+py312 = ["test", "py312"]
+py313 = ["test", "py313"]
 development = ["development", "test"]
 
 [tool.ruff]
@@ -88,7 +106,6 @@ exclude = [
     ".pants.d",
     ".ruff_cache",
     ".svn",
-    ".tox",
     ".venv",
     "__pypackages__",
     "_build",
