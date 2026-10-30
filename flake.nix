@@ -23,6 +23,19 @@
           libGL
           libxkbcommon
           mesa
+          stdenv.cc.cc.lib
+          wayland
+          xorg.libX11
+          xorg.libXcomposite
+          xorg.libXext
+          xorg.libxcb
+          xorg.xcbutilcursor
+          xorg.xcbutilimage
+          xorg.xcbutilkeysyms
+          xorg.xcbutilrenderutil
+          xorg.xcbutilwm
+          zlib
+          zstd
         ]);
         qtLibraryPath = lib.makeLibraryPath qtRuntimeLibs;
       in
@@ -40,6 +53,7 @@
               export LD_LIBRARY_PATH="${qtLibraryPath}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
               export LIBRARY_PATH="${qtLibraryPath}''${LIBRARY_PATH:+:$LIBRARY_PATH}"
               export LIBGL_DRIVERS_PATH="${pkgs.mesa}/lib/dri''${LIBGL_DRIVERS_PATH:+:$LIBGL_DRIVERS_PATH}"
+              export __EGL_VENDOR_LIBRARY_FILENAMES="${pkgs.mesa}/share/glvnd/egl_vendor.d/50_mesa.json''${__EGL_VENDOR_LIBRARY_FILENAMES:+:$__EGL_VENDOR_LIBRARY_FILENAMES}"
               # Keep host Qt plugins (e.g. KDE's Qt 6 plugins) away from the
               # PyQt5 bundled in the pixi environment.
               unset QT_PLUGIN_PATH QML2_IMPORT_PATH
