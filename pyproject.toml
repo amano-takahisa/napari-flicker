@@ -80,6 +80,7 @@ copier = ">=9.8.0,<10"
 jinja2-time = ">=0.2.0,<0.3"
 npe2 = ">=0.7.8,<0.8"
 pre-commit = ">=4.2.0,<5"
+napari = ">=0.6.6,<0.7"
 
 [tool.pixi.feature.test.dependencies]
 pytest = ">=8.4.1,<9"
