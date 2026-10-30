@@ -64,6 +64,11 @@ napari_flicker = { path = ".", editable = true }
 test-all = "pixi run -e py310 test && pixi run -e py311 test && pixi run -e py312 test && pixi run -e py313 test"
 test = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml"
 
+# Run Qt headless and ignore host Qt plugins (e.g. KDE's Qt 6 plugins) on
+# Linux, where they can clash with the PyQt5 bundled in the environment.
+[tool.pixi.target.linux-64.tasks]
+test = { cmd = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml", env = { LIBGL_ALWAYS_SOFTWARE = "1", QT_PLUGIN_PATH = "", QT_QPA_PLATFORM = "offscreen" } }
+
 [tool.pixi.feature.development.dependencies]
 copier = ">=9.8.0,<10"
 jinja2-time = ">=0.2.0,<0.3"
