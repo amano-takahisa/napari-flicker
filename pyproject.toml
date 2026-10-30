@@ -57,6 +57,12 @@ fallback_version = "0.0.1+nogit"
 channels = ["conda-forge"]
 platforms = ["linux-64", "osx-arm64", "win-64"]
 
+# Keep the lock file independent of the git-derived version. Otherwise the
+# editable package version changes on every commit, making `pixi install
+# --locked` (used by setup-pixi in CI) fail with "lock-file not up-to-date".
+[tool.pixi.activation.env]
+SETUPTOOLS_SCM_PRETEND_VERSION_FOR_NAPARI_FLICKER = "0.0.0"
+
 [tool.pixi.pypi-dependencies]
 napari_flicker = { path = ".", editable = true }
 

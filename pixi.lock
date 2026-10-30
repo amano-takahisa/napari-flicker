@@ -6494,8 +6494,8 @@ packages:
   requires_python: '>=3.11'
 - pypi: ./
   name: napari-flicker
-  version: 0.1.1.dev1+g8e4e284ea.d19800101
-  sha256: 6f5d98a05f2effdd0454dbe730ce97b38d02cc5976fb6c503061b8437b772266
+  version: 0.0.0
+  sha256: 8c3b9ce5d4c0ffed2fccbc2e4d07d6c4e77faa710e3643bb21d7ddb8575efd1a
   requires_dist:
   - pyqt5>=5.15.11,<6 ; extra == 'test'
   - napari>=0.6.2,<0.7 ; extra == 'test'
