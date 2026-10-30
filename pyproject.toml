@@ -4,7 +4,6 @@ classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Framework :: napari",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -18,7 +17,8 @@ classifiers = [
 dependencies = []
 description = "Blinking layers in napari"
 dynamic = ["version"]
-license = {file = "LICENSE"}
+license = "LicenseRef-Hippocratic-3.0-bds-cl"
+license-files = ["LICENSE"]
 name = "napari-flicker"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -36,7 +36,7 @@ napari-flicker = "napari_flicker:napari.yaml"
 "User Support" = "https://github.com/amano-takahisa/napari-flicker/issues"
 
 [build-system]
-requires = ["setuptools>=42.0.0", "wheel", "setuptools_scm"]
+requires = ["setuptools>=77.0.0", "wheel", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
 
