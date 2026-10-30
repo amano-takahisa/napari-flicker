@@ -55,7 +55,7 @@ fallback_version = "0.0.1+nogit"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
-platforms = ["linux-64", "win-64"]
+platforms = ["linux-64", "osx-arm64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
 napari_flicker = { path = ".", editable = true }
@@ -88,12 +88,12 @@ python = "3.12.*"
 python = "3.13.*"
 
 [tool.pixi.environments]
-test = ["test"]
+test = ["test", "py313"]
 py310 = ["test", "py310"]
 py311 = ["test", "py311"]
 py312 = ["test", "py312"]
 py313 = ["test", "py313"]
-development = ["development", "test"]
+development = ["development", "test", "py313"]
 
 [tool.ruff]
 line-length = 79

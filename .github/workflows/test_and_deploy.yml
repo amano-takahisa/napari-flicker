@@ -14,6 +14,9 @@ on:
     paths:
       - 'src/**'
       - 'tests/**'
+      - 'pyproject.toml'
+      - 'pixi.lock'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
@@ -39,6 +42,9 @@ jobs:
           - platform: windows-latest
             environment: py312
           - platform: windows-latest
+            environment: py313
+          # macos-latest is an Apple Silicon (osx-arm64) runner
+          - platform: macos-latest
             environment: py313
 
     steps:
