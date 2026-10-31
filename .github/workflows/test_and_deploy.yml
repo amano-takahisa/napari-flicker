@@ -49,17 +49,26 @@ jobs:
             environment: py313
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Pixi
-        uses: prefix-dev/setup-pixi@v0.8.3
+        uses: prefix-dev/setup-pixi@v0.11.2
         with:
           pixi-version: v0.49.0
           cache: true
           environments: ${{ matrix.environment }}
 
-      # these libraries enable testing on Qt on linux
-      - uses: tlambert03/setup-qt-libs@v1
+      # Qt runtime libraries that PyQt6 needs on the Ubuntu runner. This used
+      # to come from tlambert03/setup-qt-libs, which still targets Node 20.
+      - name: Install Qt and OpenGL libraries
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libdbus-1-3 libegl1 libopengl0 libxcb-cursor0 libxcb-icccm4 \
+            libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 \
+            libxcb-xinput0 libxkbcommon-x11-0 x11-utils
 
       # strategy borrowed from vispy for installing opengl libs on windows
       - name: Install Windows OpenGL
@@ -68,11 +77,11 @@ jobs:
           git clone --depth 1 https://github.com/pyvista/gl-ci-helpers.git
           powershell gl-ci-helpers/appveyor/install_opengl.ps1
 
-      # run tests with pixi for each Python version
+      # The pixi test task sets QT_QPA_PLATFORM=offscreen on Linux, so no X
+      # server is needed (the old aganders3/headless-gui wrapper still
+      # targeted Node 20).
       - name: Test with pixi
-        uses: aganders3/headless-gui@v2
-        with:
-          run: pixi run --environment ${{ matrix.environment }} test
+        run: pixi run --environment ${{ matrix.environment }} test
 
       - name: Coverage
         uses: codecov/codecov-action@v3
@@ -90,12 +99,12 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # setuptools_scm derives the version from git tags.
           fetch-depth: 0
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.x"
       - name: Build
