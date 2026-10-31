@@ -29,24 +29,24 @@ jobs:
       matrix:
         include:
           - platform: ubuntu-latest
-            environment: py310
-          - platform: ubuntu-latest
             environment: py311
           - platform: ubuntu-latest
             environment: py312
           - platform: ubuntu-latest
             environment: py313
-          - platform: windows-latest
-            environment: py310
+          - platform: ubuntu-latest
+            environment: py314
           - platform: windows-latest
             environment: py311
           - platform: windows-latest
             environment: py312
           - platform: windows-latest
             environment: py313
+          - platform: windows-latest
+            environment: py314
           # macos-latest is an Apple Silicon (osx-arm64) runner
           - platform: macos-latest
-            environment: py313
+            environment: py314
 
     steps:
       - uses: actions/checkout@v5
@@ -65,10 +65,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libdbus-1-3 libegl1 libopengl0 libxcb-cursor0 libxcb-icccm4 \
-            libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
-            libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 \
-            libxcb-xinput0 libxkbcommon-x11-0 x11-utils
+            libdbus-1-3 libegl1 libegl-mesa0 libgl1-mesa-dri libopengl0 \
+            libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-xfixes0 \
+            libxcb-xinerama0 libxcb-xinput0 libxkbcommon-x11-0 x11-utils
 
       # strategy borrowed from vispy for installing opengl libs on windows
       - name: Install Windows OpenGL
@@ -77,9 +77,9 @@ jobs:
           git clone --depth 1 https://github.com/pyvista/gl-ci-helpers.git
           powershell gl-ci-helpers/appveyor/install_opengl.ps1
 
-      # The pixi test task sets QT_QPA_PLATFORM=offscreen on Linux, so no X
-      # server is needed (the old aganders3/headless-gui wrapper still
-      # targeted Node 20).
+      # The pixi test task starts Xvfb via pytest-xvfb on Linux and renders
+      # through Qt's EGL integration, so no system X server is needed (the old
+      # aganders3/headless-gui wrapper still targeted Node 20).
       - name: Test with pixi
         run: pixi run --environment ${{ matrix.environment }} test
 

@@ -8,10 +8,10 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
 dependencies = []
@@ -21,10 +21,7 @@ license = "LicenseRef-Hippocratic-3.0-bds-cl"
 license-files = ["LICENSE"]
 name = "napari-flicker"
 readme = "README.md"
-requires-python = ">=3.10"
-
-[project.optional-dependencies]
-test = ["pyqt6>=6.5,<7,!=6.6.1,!=6.11.0,!=6.11.1", "napari>=0.6.2,<0.7"]
+requires-python = ">=3.11"
 
 [project.entry-points."napari.manifest"]
 napari-flicker = "napari_flicker:napari.yaml"
@@ -74,31 +71,28 @@ libgl = ">=1.7.0,<2"
 napari_flicker = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-test-all = "pixi run -e py310 test && pixi run -e py311 test && pixi run -e py312 test && pixi run -e py313 test"
+test-all = "pixi run -e py311 test && pixi run -e py312 test && pixi run -e py313 test && pixi run -e py314 test"
 test = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml"
 
-# Run Qt headless and ignore host Qt plugins (e.g. KDE's Qt 6 plugins) on
-# Linux, where they can clash with the PyQt6 bundled in the environment.
+# Run Qt under Xvfb (started by pytest-xvfb) and ignore host Qt plugins (e.g.
+# KDE's Qt 6 plugins) on Linux, where they can clash with the PyQt6 bundled in
+# the environment. xcb_egl lets Qt render through Mesa EGL instead of GLX.
 [tool.pixi.target.linux-64.tasks]
-test = { cmd = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml", env = { LIBGL_ALWAYS_SOFTWARE = "1", QT_PLUGIN_PATH = "", QT_QPA_PLATFORM = "offscreen" } }
+test = { cmd = "pytest -v --color=yes --cov=napari_flicker --cov-report=xml", env = { LIBGL_ALWAYS_SOFTWARE = "1", QT_PLUGIN_PATH = "", QT_QPA_PLATFORM = "xcb", QT_XCB_GL_INTEGRATION = "xcb_egl" } }
 
 [tool.pixi.feature.development.dependencies]
 copier = ">=9.8.0,<10"
 jinja2-time = ">=0.2.0,<0.3"
-npe2 = ">=0.7.8,<0.8"
 pre-commit = ">=4.2.0,<5"
-napari = ">=0.6.6,<0.7"
+napari = "*"
 
 [tool.pixi.feature.test.dependencies]
 # Keep Qt and its native libraries together in the conda-forge environment.
 pyqt6 = ">=6.5,<7,!=6.6.1,!=6.11.0,!=6.11.1"
-napari = ">=0.6.2,<0.7"
+napari = ">=0.9.2,<0.10"
 pytest = ">=8.4.1,<9"
 pytest-cov = ">=6.2.1,<7"
 pytest-qt = ">=4.5.0,<5"
-
-[tool.pixi.feature.py310.dependencies]
-python = "3.10.*"
 
 [tool.pixi.feature.py311.dependencies]
 python = "3.11.*"
@@ -109,12 +103,26 @@ python = "3.12.*"
 [tool.pixi.feature.py313.dependencies]
 python = "3.13.*"
 
+[tool.pixi.feature.py314.dependencies]
+python = "3.14.*"
+
+# napari 0.9 renders layers through QOpenGLWidget, which the Qt offscreen
+# platform does not support. pytest-xvfb starts Xvfb so the tests get a real
+# X display and an OpenGL context.
+[tool.pixi.feature.test.target.linux-64.dependencies]
+# xorg-xvfb-server ships share/X11/xkb/compiled/.keep, while xkeyboard-config
+# >=2.45 makes share/X11/xkb a symlink. The two layouts cannot be linked into
+# the same prefix, so pin the last version that installs a real directory.
+xkeyboard-config = "2.44.*"
+pytest-xvfb = ">=3.1.0,<4"
+xorg-xvfb-server = ">=21.1.25,<22"
+
 [tool.pixi.environments]
 test = ["test", "py313"]
-py310 = ["test", "py310"]
 py311 = ["test", "py311"]
 py312 = ["test", "py312"]
 py313 = ["test", "py313"]
+py314 = ["test", "py314"]
 development = ["development", "test", "py313"]
 
 [tool.ruff]

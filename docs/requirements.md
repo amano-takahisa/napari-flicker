@@ -39,9 +39,9 @@ The napari-flicker plugin provides a simple layer visibility toggle functionalit
 - **NFR1.3**: The plugin shall handle up to 50 layers without performance degradation
 
 ### NFR2: Compatibility
-- **NFR2.1**: The plugin shall be compatible with napari 0.6.x
+- **NFR2.1**: The plugin shall be compatible with napari 0.9.x
 - **NFR2.2**: The plugin shall work on Linux, Windows, and macOS
-- **NFR2.3**: The plugin shall support Python 3.10+
+- **NFR2.3**: The plugin shall support Python 3.11+
 
 ### NFR3: Usability
 - **NFR3.1**: The plugin interface shall be self-explanatory
