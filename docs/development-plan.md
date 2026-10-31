@@ -126,7 +126,7 @@ class FlickerWidget(QWidget):
 - **Timer Implementation**: QTimer for precise 500ms intervals
 - **Layer Management**: Direct napari viewer layer access
 - **State Management**: Simple boolean flags for flicker state
-- **UI Framework**: PyQt5/PySide2 via qtpy for compatibility
+- **UI Framework**: PyQt6/PySide6 via qtpy for compatibility
 
 ### Data Flow
 1. **Initialization**: Widget connects to napari viewer
@@ -263,7 +263,7 @@ Following TDD principles, all code is developed using the Red-Green-Refactor cyc
 ### Required Dependencies
 - **napari**: ≥0.6.0 (core napari functionality)
 - **qtpy**: (Qt abstraction layer)
-- **PyQt5/PySide2**: (GUI framework, via napari)
+- **PyQt6/PySide6**: (GUI framework, via napari)
 
 ### Development Dependencies
 - **pytest**: Testing framework

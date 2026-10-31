@@ -345,6 +345,9 @@ How should this feature work?
 git clone https://github.com/amano-takahisa/napari-flicker.git
 cd napari-flicker
 
+# Load the Nix tools (when using Nix/direnv)
+direnv allow
+
 # Set up development environment
 pixi shell --environment development
 
@@ -352,8 +355,33 @@ pixi shell --environment development
 pre-commit install
 
 # Run tests
-pixi run --environment test tox
+pixi run --environment test test
 ```
+
+On NixOS, the Nix shell exposes the running system's GPU drivers through
+`/run/opengl-driver/lib`. Pixi supplies Qt and its native libraries from
+conda-forge; on Linux, `VISPY_GL_LIB` points to Pixi's `libGL.so.1`.
+Run pre-commit from the Pixi development environment as well.
+Headless Qt settings apply only to the test task.
+
+Start the GUI with:
+
+```bash
+pixi run -e development napari --with napari-flicker 'Flicker Widget'
+```
+
+The locked Qt build can use XWayland (`xcb`) on a Wayland desktop.
+It may warn that the native Wayland platform plugin is unavailable.
+
+When migrating an existing environment from PyPI Qt to conda-forge Qt,
+recreate it if Qt reports missing platform plugins. For example, move
+`.pixi/envs/development` outside `.pixi/envs`, then run
+`pixi install --locked -e development`.
+
+After changing `flake.nix`, run `direnv reload`. If the current terminal was
+started inside the old environment, open a fresh desktop terminal and enter
+the repository again. The environment inherits `WAYLAND_DISPLAY` and `DISPLAY`
+from the desktop session; it does not choose or hard-code a display socket.
 
 ### Local Testing
 
