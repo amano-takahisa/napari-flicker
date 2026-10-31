@@ -49,7 +49,7 @@ jobs:
             environment: py313
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.11.2
@@ -96,12 +96,12 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           # setuptools_scm derives the version from git tags.
           fetch-depth: 0
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
       - name: Build
