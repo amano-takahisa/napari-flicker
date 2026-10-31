@@ -83,9 +83,6 @@ jobs:
       - name: Test with pixi
         run: pixi run --environment ${{ matrix.environment }} test
 
-      - name: Coverage
-        uses: codecov/codecov-action@v3
-
   deploy:
     # Runs when a commit tagged "v*" is pushed. Authentication uses the
     # GitHub OIDC token, matched by the PyPI Trusted Publisher configured for

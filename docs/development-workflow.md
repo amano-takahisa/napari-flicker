@@ -248,9 +248,6 @@ jobs:
 
     - name: Run tests
       run: pytest --cov=napari_flicker --cov-report=xml
-
-    - name: Upload coverage
-      uses: codecov/codecov-action@v3
 ```
 
 ### Pre-commit Hooks
