@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Dict, List
 
 from qtpy.QtWidgets import (
     QVBoxLayout,
+    QHBoxLayout,
     QPushButton,
     QWidget,
     QCheckBox,
@@ -56,8 +57,13 @@ class FlickerWidget(QWidget):
         layout.addWidget(title_label)
 
         # Layer selection area
-        layers_label = QLabel('Available Layers:')
-        layout.addWidget(layers_label)
+        layers_header = QHBoxLayout()
+        layers_header.addWidget(QLabel('Available Layers:'))
+        self.refresh_button = QPushButton('Refresh Layers')
+        self.refresh_button.setToolTip('Reload the layer list from the viewer')
+        self.refresh_button.clicked.connect(self._update_layer_list)
+        layers_header.addWidget(self.refresh_button)
+        layout.addLayout(layers_header)
 
         # Scrollable area for layer checkboxes
         self.scroll_area = QScrollArea()
@@ -88,16 +94,24 @@ class FlickerWidget(QWidget):
         ]
 
     def _update_layer_list(self):
-        """Update the layer checkbox list."""
+        """Update the layer checkbox list, keeping checked layers checked."""
+        checked_names = {
+            checkbox.text()
+            for checkbox in self.layer_checkboxes
+            if checkbox.isChecked()
+        }
+
         # Clear existing checkboxes
         for checkbox in self.layer_checkboxes:
             checkbox.setParent(None)
+            checkbox.deleteLater()
         self.layer_checkboxes.clear()
 
         # Add checkboxes for supported layers
         supported_layers = self._get_supported_layers()
         for layer in supported_layers:
             checkbox = QCheckBox(layer.name)
+            checkbox.setChecked(layer.name in checked_names)
             self.layer_checkboxes.append(checkbox)
             self.scroll_layout.addWidget(checkbox)
 

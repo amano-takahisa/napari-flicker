@@ -69,6 +69,39 @@ def test_flicker_widget_ui_update(make_napari_viewer):
     assert widget.layer_checkboxes[1].text() == 'Image 1'
 
 
+def test_flicker_widget_refresh_button(make_napari_viewer):
+    """Refresh button rebuilds the layer list on demand."""
+    viewer = make_napari_viewer()
+    widget = FlickerWidget(viewer)
+    assert isinstance(widget.refresh_button, QPushButton)
+
+    # Simulate a viewer whose events the widget is not listening to
+    viewer.layers.events.inserted.disconnect(widget._on_layers_changed)
+    viewer.add_image(np.random.random((100, 100)), name='Image 1')
+    assert len(widget.layer_checkboxes) == 0
+
+    widget.refresh_button.click()
+
+    assert len(widget.layer_checkboxes) == 1
+    assert widget.layer_checkboxes[0].text() == 'Image 1'
+
+
+def test_flicker_widget_refresh_keeps_selection(make_napari_viewer):
+    """Rebuilding the layer list preserves checked layers."""
+    viewer = make_napari_viewer()
+    viewer.add_image(np.random.random((100, 100)), name='Image 1')
+    widget = FlickerWidget(viewer)
+    widget.layer_checkboxes[0].setChecked(True)
+
+    viewer.add_labels(np.random.randint(0, 5, (100, 100)), name='Labels 1')
+    widget.refresh_button.click()
+
+    checked = [cb.text() for cb in widget.layer_checkboxes if cb.isChecked()]
+    assert checked == ['Image 1']
+    assert len(widget._get_selected_layers()) == 1
+    assert widget._get_selected_layers()[0].name == 'Image 1'
+
+
 def test_flicker_widget_toggle_button(make_napari_viewer):
     """Test start/stop toggle button functionality."""
     viewer = make_napari_viewer()

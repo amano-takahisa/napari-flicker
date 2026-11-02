@@ -25,6 +25,7 @@ Or open the widget from the menu: **Plugins > Flicker > Flicker Widget**.
 
 1. Load the layers you want to compare.
 2. Tick the layers you want to blink in the **Available Layers** list.
+   **Refresh Layers** reloads that list from the viewer, keeping your ticks.
 3. Click **Start Flicker**. The selected layers toggle their visibility every
    0.5 seconds, so you can spot differences between them.
 4. Click **Stop Flicker** to stop and restore each selected layer to the
