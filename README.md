@@ -27,7 +27,8 @@ Or open the widget from the menu: **Plugins > Flicker > Flicker Widget**.
 2. Tick the layers you want to blink in the **Available Layers** list.
 3. Click **Start Flicker**. The selected layers toggle their visibility every
    0.5 seconds, so you can spot differences between them.
-4. Click **Stop Flicker** to stop.
+4. Click **Stop Flicker** to stop and restore each selected layer to the
+   visibility it had when you clicked **Start Flicker**.
 
 ## Notes
 

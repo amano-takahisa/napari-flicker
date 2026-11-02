@@ -129,6 +129,52 @@ def test_flicker_widget_layer_visibility_toggle(make_napari_viewer):
     assert label_layer.visible == initial_label_visible
 
 
+def test_flicker_widget_restores_visibility_on_stop(make_napari_viewer):
+    """Stopping flicker restores visibility captured at start."""
+    viewer = make_napari_viewer()
+    img_layer = viewer.add_image(np.random.random((100, 100)), name='Image 1')
+    label_layer = viewer.add_labels(
+        np.random.randint(0, 5, (100, 100)), name='Labels 1'
+    )
+    img_layer.visible = True
+    label_layer.visible = False
+
+    widget = FlickerWidget(viewer)
+    widget._update_layer_list()
+    widget.layer_checkboxes[0].setChecked(True)
+    widget.layer_checkboxes[1].setChecked(True)
+
+    widget._toggle_flicker()
+    widget._flicker_tick()
+    assert img_layer.visible is False
+    assert label_layer.visible is True
+
+    widget._toggle_flicker()
+    assert img_layer.visible is True
+    assert label_layer.visible is False
+
+
+def test_flicker_widget_restore_ignores_removed_layers(make_napari_viewer):
+    """Restoring visibility skips layers removed during flicker."""
+    viewer = make_napari_viewer()
+    img_layer = viewer.add_image(np.random.random((100, 100)), name='Image 1')
+    label_layer = viewer.add_labels(
+        np.random.randint(0, 5, (100, 100)), name='Labels 1'
+    )
+
+    widget = FlickerWidget(viewer)
+    widget._update_layer_list()
+    widget.layer_checkboxes[0].setChecked(True)
+    widget.layer_checkboxes[1].setChecked(True)
+
+    widget._toggle_flicker()
+    widget._flicker_tick()
+    viewer.layers.remove(label_layer)
+
+    widget._toggle_flicker()
+    assert img_layer.visible is True
+
+
 def test_flicker_widget_no_layers_selected(make_napari_viewer):
     """Test behavior when no layers are selected."""
     viewer = make_napari_viewer()

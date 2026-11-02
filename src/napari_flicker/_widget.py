@@ -5,7 +5,7 @@ References:
 - Widget specification: https://napari.org/stable/plugins/building_a_plugin/guides.html#widgets
 """
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Dict, List
 
 from qtpy.QtWidgets import (
     QVBoxLayout,
@@ -28,6 +28,9 @@ class FlickerWidget(QWidget):
         super().__init__()
         self.viewer = viewer
         self.layer_checkboxes: List[QCheckBox] = []
+
+        # Layer visibility captured when flicker starts, restored on stop
+        self._initial_visibility: Dict['napari.layers.Layer', bool] = {}
 
         # Setup timer for flicker functionality
         self.flicker_timer = QTimer()
@@ -116,16 +119,27 @@ class FlickerWidget(QWidget):
     def _toggle_flicker(self):
         """Toggle the flicker functionality on/off."""
         if self.flicker_timer.isActive():
-            # Stop flicker
+            # Stop flicker and restore the visibility captured at start
             self.flicker_timer.stop()
+            self._restore_visibility()
             self.toggle_button.setText('Start Flicker')
         else:
             # Start flicker only if layers are selected
             selected_layers = self._get_selected_layers()
             if selected_layers:
+                self._initial_visibility = {
+                    layer: layer.visible for layer in selected_layers
+                }
                 self.flicker_timer.start()
                 self.toggle_button.setText('Stop Flicker')
             # If no layers selected, do nothing (button stays "Start Flicker")
+
+    def _restore_visibility(self):
+        """Restore layer visibility captured when flicker started."""
+        for layer, visible in self._initial_visibility.items():
+            if layer in list(self.viewer.layers):
+                layer.visible = visible
+        self._initial_visibility = {}
 
     def _flicker_tick(self):
         """Toggle visibility of selected layers."""
