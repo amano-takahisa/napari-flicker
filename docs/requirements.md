@@ -8,7 +8,7 @@ The napari-flicker plugin provides a simple layer visibility toggle functionalit
 ### FR1: Layer Selection
 - **FR1.1**: The plugin shall display a list of all loaded layers in the napari viewer
 - **FR1.2**: Users shall be able to select multiple layers for flickering using checkboxes
-- **FR1.3**: Only Image and Labels layer types shall be supported
+- **FR1.3**: Only Image, Labels, Shapes and Points layer types shall be supported
 - **FR1.4**: The layer list shall automatically update when layers are added or removed from the viewer
 
 ### FR2: Flicker Control
@@ -60,8 +60,10 @@ The napari-flicker plugin provides a simple layer visibility toggle functionalit
 - **Supported Layer Types**:
   - `napari.layers.Image`
   - `napari.layers.Labels`
+  - `napari.layers.Shapes`
+  - `napari.layers.Points`
 - **Unsupported Layer Types**:
-  - Points, Shapes, Tracks, Vectors, Surface layers
+  - Tracks, Vectors, Surface layers
 
 ### User Interface Components
 - **Layer Selection**: QCheckBox widgets in a scrollable area
@@ -71,7 +73,7 @@ The napari-flicker plugin provides a simple layer visibility toggle functionalit
 ## Acceptance Criteria
 
 ### AC1: Basic Functionality
-- [ ] User can select multiple Image/Labels layers using checkboxes
+- [ ] User can select multiple Image/Labels/Shapes/Points layers using checkboxes
 - [ ] Selected layers flicker (visibility toggle) at 0.5-second intervals
 - [ ] Flicker can be started and stopped using a single button
 - [ ] Unselected layers remain unaffected during flickering

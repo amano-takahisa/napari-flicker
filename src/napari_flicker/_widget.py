@@ -83,10 +83,15 @@ class FlickerWidget(QWidget):
         self.setLayout(layout)
 
     def _get_supported_layers(self):
-        """Get Image and Labels layers from viewer in reverse order."""
+        """Get Image, Labels, Shapes and Points layers in reverse order."""
         import napari
 
-        supported_types = (napari.layers.Image, napari.layers.Labels)
+        supported_types = (
+            napari.layers.Image,
+            napari.layers.Labels,
+            napari.layers.Shapes,
+            napari.layers.Points,
+        )
         return [
             layer
             for layer in reversed(self.viewer.layers)

@@ -30,21 +30,50 @@ def test_flicker_widget_initialization(make_napari_viewer):
 
 
 def test_flicker_widget_layer_detection(make_napari_viewer):
-    """Test layer detection and filtering for Image/Labels only."""
+    """Test layer detection and filtering for supported layer types."""
     viewer = make_napari_viewer()
 
     # Add different types of layers
     viewer.add_image(np.random.random((100, 100)), name='Image 1')
     viewer.add_labels(np.random.randint(0, 5, (100, 100)), name='Labels 1')
     viewer.add_points(np.random.random((10, 2)), name='Points 1')
+    viewer.add_shapes(
+        [np.array([[0, 0], [0, 5], [5, 5], [5, 0]])], name='Shapes 1'
+    )
+    viewer.add_vectors(np.random.random((10, 2, 2)), name='Vectors 1')
 
     widget = FlickerWidget(viewer)
 
     # Test _get_supported_layers method
     supported_layers = widget._get_supported_layers()
-    assert len(supported_layers) == 2
-    assert supported_layers[0].name == 'Labels 1'
-    assert supported_layers[1].name == 'Image 1'
+    assert [layer.name for layer in supported_layers] == [
+        'Shapes 1',
+        'Points 1',
+        'Labels 1',
+        'Image 1',
+    ]
+
+
+def test_flicker_widget_shapes_and_points_flicker(make_napari_viewer):
+    """Shapes and Points layers toggle visibility like other layers."""
+    viewer = make_napari_viewer()
+    shapes = viewer.add_shapes(
+        [np.array([[0, 0], [0, 5], [5, 5], [5, 0]])], name='Shapes 1'
+    )
+    points = viewer.add_points(np.random.random((10, 2)), name='Points 1')
+
+    widget = FlickerWidget(viewer)
+    for checkbox in widget.layer_checkboxes:
+        checkbox.setChecked(True)
+
+    widget._toggle_flicker()
+    widget._flicker_tick()
+    assert shapes.visible is False
+    assert points.visible is False
+
+    widget._toggle_flicker()
+    assert shapes.visible is True
+    assert points.visible is True
 
 
 def test_flicker_widget_ui_update(make_napari_viewer):

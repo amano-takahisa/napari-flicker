@@ -33,7 +33,7 @@ Or open the widget from the menu: **Plugins > Flicker > Flicker Widget**.
 
 ## Notes
 
-- Only **Image** and **Labels** layers can be flickered.
+- **Image**, **Labels**, **Shapes** and **Points** layers can be flickered.
 - The flicker interval is fixed at 0.5 seconds.
 - All selected layers toggle together.
 - The layer list updates automatically when layers are added to or removed
